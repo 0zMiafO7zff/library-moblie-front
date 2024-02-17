@@ -1,0 +1,27 @@
+nav{
+    box-shadow: 0 0 2px 2px rgba(0,0,0,0.16);
+    position: fixed;
+    width: 100%;
+    z-index: 100;
+    top: 0;
+    left: 0;
+    transition: top 0.5s;
+}
+
+.menu-items li a{
+    position: relative;
+}
+.menu-items li a::after{
+    content: "";
+    position: absolute;
+    background-color: black;
+    height: 1.75px;
+    width: 0;
+    left: 0;
+    bottom: -3px;
+    transition: .3s;
+}
+
+.menu-items li a:hover::after{
+    width: 100%;
+}

@@ -1,46 +1,50 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import { Link } from "react-router-dom";
 import Navbar from "./Navbar.jsx";
+import BookService from "../service/BookService.js";
 
 export default function ListBook_ID() {
   const [searchValue, setSearchValue] = useState(""); // สร้าง state เพื่อเก็บค่าที่ผู้ใช้กรอกในช่อง search
   const [filteredBooks, setFilteredBooks] = useState([]); // สร้าง state เพื่อเก็บผลลัพธ์จากการค้นหา
+  const [book, setBook] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
 
   const books = [
     {
       id: "B00001",
       title: "คู่มือการสอบรับราชการ",
-      writer: "สมรักษ์ สะอาด",
+      borrower: "สมรักษ์ สะอาด",
       category: "วิชาการ",
       price: "299 บาท"
     },
     {
       id: "B00002",
       title: "แฮร์รี่ พอตเตอร์",
-      writer: "J.K Rowling",
+      borrower: "J.K Rowling",
       category: "วรรณกรรม",
       price: "359 บาท"
     },
     {
       id: "B00003",
       title: "เย็บ ปัก ถักร้อย",
-      writer: "สะอาด อิ่มสุข",
+      borrower: "สะอาด อิ่มสุข",
       category: "เบ็ดเตล็ด",
       price: "249 บาท"
     },
     {
       id: "B00004",
       title: "เจ้าชายน้อย",
-      writer: "อ็องตวน เดอ แซ็งแต๊กซูว์ เปรี",
+      borrower: "อ็องตวน เดอ แซ็งแต๊กซูว์ เปรี",
       category: "วรรณกรรม",
       price: "355 บาท"
     },
     {
       id: "B00005",
-      title: "การเขียนโปรแกรมคอมพิวเตอร์",
-      writer: "กิ่งแก้ว กลิ่นหอม",
-      category: "วิชาการ",
-      price: "329 บาท"
+      title: "เจ้าชายน้อย",
+      borrower: "อ็องตวน เดอ แซ็งแต๊กซูว์ เปรี",
+      category: "วรรณกรรม",
+      price: "355 บาท"
     },
   ];
 
@@ -54,6 +58,19 @@ export default function ListBook_ID() {
 
     setFilteredBooks(filteredBooks);
   };
+
+  useEffect(() => {
+    const fetchBook = async () => {
+      try {
+        const response = await BookService.getAllBook();
+        setBorrows(response.data.allBooks);
+      } catch (error) {
+        console.error("Error fetching borrows:", error);
+      }
+    };
+
+    fetchBook();
+  }, []);
 
   return (
     <>
@@ -79,7 +96,7 @@ export default function ListBook_ID() {
               </button>
             </div>
             <h1 className="text-xl flex justify-center my-4">
-              แสดงข้อมูลรหัสหนังสือ
+              แสดงข้อมูลชื่อหนังสือ
             </h1>
 
             {searchValue === "" ? (
@@ -92,9 +109,10 @@ export default function ListBook_ID() {
                   >
                     <p>รหัสหนังสือ: {book.id}</p>
                     <p>ชื่อหนังสือ: {book.title}</p>
-                    <p>ผู้เขียน: {book.writer}</p>
-                    <p>หมวดหมู่: {book.category}</p>
-                    <p>ราคา: {book.price}</p>
+                    <p>ผู้เขียน: {book.borrower}</p>
+                    <p>หมวดหมู่: {book.borrowedDate}</p>
+                    <p>วันที่คืน: {book.returnDate}</p>
+                    <p>ค่าปรับ: {book.fine}</p>
                   </div>
                 ))}
               </div>
@@ -108,9 +126,10 @@ export default function ListBook_ID() {
                   >
                     <p>รหัสหนังสือ: {book.id}</p>
                     <p>ชื่อหนังสือ: {book.title}</p>
-                    <p>ผู้เขียน: {book.writer}</p>
-                    <p>หมวดหมู่: {book.category}</p>
-                    <p>ราคา: {book.price}</p>
+                    <p>ผู้ยืม: {book.borrower}</p>
+                    <p>วันที่ยืม: {book.borrowedDate}</p>
+                    <p>วันที่คืน: {book.returnDate}</p>
+                    <p>ค่าปรับ: {book.fine}</p>
                   </div>
                 ))}
               </div>
